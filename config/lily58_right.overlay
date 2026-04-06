@@ -1,0 +1,42 @@
+/*
+ * Wired split over TRRS cable, single data wire.
+ * Right = central = RX only.
+ * uart0 RX on P0.08 (D0) — the one TRRS data pin.
+ * uart0 TX disconnected (central doesn't need to send for basic key forwarding).
+ */
+
+#include <zephyr/dt-bindings/pinctrl/nrf-pinctrl.h>
+
+&pinctrl {
+    uart0_default: uart0_default {
+        group1 {
+            psels = <NRF_PSEL(UART_RX, 0, 8)>;
+            bias-pull-up;
+        };
+        group2 {
+            psels = <NRF_PSEL_DISCONNECTED(UART_TX)>;
+        };
+    };
+    uart0_sleep: uart0_sleep {
+        group1 {
+            psels = <NRF_PSEL(UART_RX, 0, 8)>,
+                    <NRF_PSEL_DISCONNECTED(UART_TX)>;
+            low-power-enable;
+        };
+    };
+};
+
+&spi3 {
+    status = "disabled";
+};
+
+&uart0 {
+    status = "okay";
+};
+
+/ {
+    wired_split: wired_split {
+        compatible = "zmk,wired-split";
+        device = <&uart0>;
+    };
+};
