@@ -3,6 +3,7 @@
  * Left = peripheral = TX only.
  * uart0 TX reassigned to P0.17 (D2) — the one TRRS data pin.
  * uart0 RX disconnected (not needed for peripheral→central key events).
+ * I2C disabled to free up P0.17 for UART.
  */
 
 #include <zephyr/dt-bindings/pinctrl/nrf-pinctrl.h>
@@ -26,12 +27,16 @@
     };
 };
 
-&spi3 {
+&pro_micro_i2c {
     status = "disabled";
 };
 
 &uart0 {
     status = "okay";
+};
+
+&led_strip {
+    chain-length = <34>; /* 5 underglow + 29 per-key */
 };
 
 / {
