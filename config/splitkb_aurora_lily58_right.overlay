@@ -1,6 +1,6 @@
 /*
- * Wired split over TRRS cable, single data wire, half-duplex UART.
- * Both TX and RX assigned to P0.17 (D2) — the one TRRS data pin.
+ * Wired split over TRRS cable, single data wire, simplex UART.
+ * Right = central = RX only on P0.17 (D2).
  * I2C disabled to free up P0.17 for UART.
  */
 
@@ -9,15 +9,17 @@
 &pinctrl {
     uart0_default: uart0_default {
         group1 {
-            psels = <NRF_PSEL(UART_TX, 0, 17)>,
-                    <NRF_PSEL(UART_RX, 0, 17)>;
+            psels = <NRF_PSEL(UART_RX, 0, 17)>;
             bias-pull-up;
+        };
+        group2 {
+            psels = <NRF_PSEL_DISCONNECTED(UART_TX)>;
         };
     };
     uart0_sleep: uart0_sleep {
         group1 {
-            psels = <NRF_PSEL(UART_TX, 0, 17)>,
-                    <NRF_PSEL(UART_RX, 0, 17)>;
+            psels = <NRF_PSEL(UART_RX, 0, 17)>,
+                    <NRF_PSEL_DISCONNECTED(UART_TX)>;
             low-power-enable;
         };
     };
